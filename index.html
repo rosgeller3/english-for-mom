@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="ગુજરાતી બોલનારા માટે રોજ 30 મિનિટનો અંગ્રેજી અભ્યાસ.">
+<meta name="theme-color" content="#0d6e5e">
+<title>ચાલો અંગ્રેજી શીખીએ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo lat">A</span>
+    <div>
+      <h1>ચાલો અંગ્રેજી શીખીએ</h1>
+      <p class="sub">રોજ 30 મિનિટ, પહેલાં શબ્દો પછી વાક્યો</p>
+    </div>
+  </div>
+  <div class="topright">
+    <div class="streak" title="સળંગ દિવસ"><span>🔥</span><span id="streakNum">0</span></div>
+    <button class="iconbtn" id="btnSettings" aria-label="સેટિંગ">⚙️</button>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-view="home">🏠 આજનું સત્ર</button>
+  <button class="tab" data-view="list">📚 બધા પાઠ</button>
+  <button class="tab" data-view="practice">🎯 અભ્યાસ</button>
+  <button class="tab" data-view="words">🔤 મારા શબ્દો</button>
+  <button class="tab" data-view="track">📈 પ્રગતિ</button>
+</nav>
+
+<main id="app"></main>
+
+<div class="modal-back" id="settingsModal" hidden>
+  <div class="modal">
+    <h2>સેટિંગ</h2>
+    <label class="setrow"><span>શીખનારનું નામ</span><input type="text" id="learnerName" placeholder="જેમ કે મમ્મી"></label>
+    <label class="setrow"><span>અવાજની ઝડપ</span><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><b id="rateVal"></b></label>
+    <label class="setrow"><span>અંગ્રેજી અવાજ</span><select id="voiceSel"></select></label>
+    <label class="setrow check"><input type="checkbox" id="autoplay"><span>નવો શબ્દ દેખાય ત્યારે આપોઆપ બોલે</span></label>
+    <label class="setrow check"><input type="checkbox" id="bigtext"><span>અક્ષર મોટા કરો</span></label>
+    <div class="modal-foot">
+      <button class="btn ghost small" id="btnReset">પ્રગતિ ભૂંસો</button>
+      <button class="btn" id="btnCloseSet">બંધ કરો</button>
+    </div>
+  </div>
+</div>
+<script src="words.js"></script>
+<script src="lessons.js"></script>
+<script src="track.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>પ્રગતિ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo lat">A</span>
+    <div>
+      <h1>પ્રગતિનો અહેવાલ</h1>
+      <p class="sub">અંગ્રેજી શીખવાની પ્રગતિ</p>
+    </div>
+  </div>
+  <div class="topright"><a class="btn ghost small" href="index.html">એપ ખોલો →</a></div>
+</header>
+
+<main id="app">
+  <div class="card empty"><span class="em">📈</span><p>વાંચાય છે…</p></div>
+</main>
+
+<script src="words.js"></script>
+<script src="lessons.js"></script>
+<script src="track.js"></script>
+<script>
+(async function(){
+  const host = document.getElementById("app");
+  const code = location.hash.replace(/^#/, "").trim();
+  if (!code){
+    host.innerHTML = `<div class="card empty"><span class="em">🔗</span>
+      <h2 style="margin:0 0 8px">લિંક અધૂરી છે</h2>
+      <p>એપમાં 📈 પ્રગતિ ખોલીને "મારી પ્રગતિની લિંક બનાવો" દબાવો,<br>અને એ આખી લિંક વાપરો.</p>
+      <p><a class="btn" href="index.html">એપ ખોલો</a></p></div>`;
+    return;
+  }
+  try{
+    const r = await decodeProgress(code);
+    host.innerHTML = dashboardHTML(r);
+    paintName(host, r.name);
+    document.title = ((r.name && r.name.trim()) || "શીખનાર") + " — પ્રગતિ";
+  }catch(e){
+    host.innerHTML = `<div class="card empty"><span class="em">⚠️</span>
+      <h2 style="margin:0 0 8px">આ લિંક વાંચી શકાઈ નહીં</h2>
+      <p>કદાચ લિંક અધૂરી કોપી થઈ છે. આખી લિંક ફરીથી મોકલવાનું કહો.</p></div>`;
+  }
+})();
+</script>
+</body>
+</html>
