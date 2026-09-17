@@ -4,6 +4,9 @@ const DEFAULTS = { name:"", done:[], scores:{}, srs:{}, streak:0, lastDay:"", se
 let S = Object.assign({}, DEFAULTS);
 let lastCode = "";
 
+function lsGet(){ try{ const r = localStorage.getItem("gujeng_live"); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
+function lsSet(v){ try{ localStorage.setItem("gujeng_live", JSON.stringify(v)); }catch(e){} }
+
 function save(){ lsSet(S); }
 
 function todayKey(d){ return dayKey(d); }
