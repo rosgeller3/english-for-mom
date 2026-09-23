@@ -7,7 +7,9 @@ const UNITS = [].concat(
 );
 const P1 = UNITS.filter(u => u.part === 1);
 const P2 = UNITS.filter(u => u.part === 2);
-const ALL_WORDS = UNITS.flatMap(u => u.items.map(w => w.e));   // stable order = the encoding's index
+var ALL_WORDS = [];                                  // stable order = the encoding's index
+for (var _i = 0; _i < UNITS.length; _i++)
+  for (var _j = 0; _j < UNITS[_i].items.length; _j++) ALL_WORDS.push(UNITS[_i].items[_j].e);
 
 function dayKey(d){
   d = d || new Date();

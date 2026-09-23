@@ -6,10 +6,51 @@
 <meta name="description" content="ગુજરાતી બોલનારા માટે રોજ 30 મિનિટનો અંગ્રેજી અભ્યાસ.">
 <meta name="theme-color" content="#0d6e5e">
 <title>ચાલો અંગ્રેજી શીખીએ</title>
+<script>
+/* The page reports its own failure, because a blank screen on someone else's
+   device tells us nothing. Shows any script error plus the device string. */
+(function(){
+  var log = [];
+  function show(){
+    var host = document.body || document.documentElement;
+    var d = document.getElementById("bootErr");
+    if (!d){
+      d = document.createElement("div");
+      d.id = "bootErr";
+      d.setAttribute("style","margin:12px;padding:14px;border:2px solid #b3261e;border-radius:12px;"+
+        "background:#fceceb;color:#3a1412;font:13px/1.5 -apple-system,system-ui,sans-serif;"+
+        "white-space:pre-wrap;word-break:break-word;position:relative;z-index:99");
+      host.insertBefore(d, host.firstChild);
+    }
+    d.textContent = "આ લખાણ કોપી કરીને મોકલો (send this text):\n\n" +
+      log.join("\n") + "\n\nUA: " + navigator.userAgent;
+  }
+  window.addEventListener("error", function(e){
+    log.push("ERROR: " + (e.message || "?") + "  @ " +
+      String(e.filename || "").split("/").pop() + ":" + (e.lineno || 0));
+    show();
+  }, true);
+  window.addEventListener("unhandledrejection", function(e){
+    log.push("PROMISE: " + ((e.reason && (e.reason.message || e.reason)) || "?"));
+    show();
+  });
+  window.addEventListener("load", function(){
+    setTimeout(function(){
+      var app = document.getElementById("app");
+      if (app && app.innerHTML.replace(/\s/g,"") === "" && !log.length){
+        log.push("એપ ખાલી રહી (app stayed empty, no error fired)");
+        log.push("WORD_PACKS=" + (typeof WORD_PACKS) + " LESSONS=" + (typeof LESSONS) +
+                 " UNITS=" + (typeof UNITS) + " S=" + (typeof S));
+        show();
+      }
+    }, 2500);
+  });
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
 <header class="topbar">
@@ -50,9 +91,9 @@
     </div>
   </div>
 </div>
-<script src="words.js?v=3"></script>
-<script src="lessons.js?v=3"></script>
-<script src="track.js?v=3"></script>
-<script src="app.js?v=3"></script>
+<script src="words.js?v=4"></script>
+<script src="lessons.js?v=4"></script>
+<script src="track.js?v=4"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>
