@@ -106,7 +106,11 @@ function speak(text, rate){
     const v = bestVoice();
     if (v){ u.voice = v; u.lang = v.lang; } else { u.lang = "en-IN"; }
     u.rate = rate || Number(S.rate) || 0.8;
-    u.onerror = function(){
+    u.onerror = function(ev){
+      // cancelling one word to speak the next raises an error event too; that is
+      // normal tapping, not a fault, so only a real failure may say anything
+      const why = ev && ev.error;
+      if (why === "interrupted" || why === "canceled" || why === "cancelled") return;
       const note = document.getElementById("spkNote");
       if (note) note.textContent = "અવાજ ન સંભળાય? સાઇલન્ટ સ્વિચ બંધ કરો અને વોલ્યુમ વધારો.";
     };
