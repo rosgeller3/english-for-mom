@@ -84,7 +84,7 @@ function bestVoice(){
 /* iOS/iPadOS will not speak unless the very first utterance comes from inside a
    real touch handler, and it drops an utterance queued right after cancel().
    Both of those make an audio-first app look completely broken on an iPad. */
-let speechReady = false, spkTimer = null;
+let speechReady = false;
 function unlockSpeech(){
   if (speechReady || !("speechSynthesis" in window)) return;
   try{
@@ -106,14 +106,10 @@ function speak(text, rate){
     const v = bestVoice();
     if (v){ u.voice = v; u.lang = v.lang; } else { u.lang = "en-IN"; }
     u.rate = rate || Number(S.rate) || 0.8;
-    const note = document.getElementById("spkNote");
-    if (note){
-      clearTimeout(spkTimer);
-      u.onstart = function(){ clearTimeout(spkTimer); note.textContent = ""; };
-      spkTimer = setTimeout(function(){
-        note.textContent = "અવાજ ન સંભળાય? આઇપેડની બાજુની સ્વિચ પર સાઇલન્ટ બંધ કરો અને વોલ્યુમ વધારો.";
-      }, 1600);
-    }
+    u.onerror = function(){
+      const note = document.getElementById("spkNote");
+      if (note) note.textContent = "અવાજ ન સંભળાય? સાઇલન્ટ સ્વિચ બંધ કરો અને વોલ્યુમ વધારો.";
+    };
     speechSynthesis.speak(u);
     if (speechSynthesis.paused) speechSynthesis.resume();
   }catch(e){}

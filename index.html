@@ -10,6 +10,7 @@
 /* The page reports its own failure, because a blank screen on someone else's
    device tells us nothing. Shows any script error plus the device string. */
 (function(){
+  if (location.search.indexOf("debug") === -1) return;   // only when asked for
   var log = [];
   function show(){
     var host = document.body || document.documentElement;
@@ -50,7 +51,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
 <header class="topbar">
@@ -91,9 +92,9 @@
     </div>
   </div>
 </div>
-<script src="words.js?v=4"></script>
-<script src="lessons.js?v=4"></script>
-<script src="track.js?v=4"></script>
-<script src="app.js?v=4"></script>
+<script src="words.js?v=5"></script>
+<script src="lessons.js?v=5"></script>
+<script src="track.js?v=5"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>
