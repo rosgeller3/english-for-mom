@@ -81,15 +81,41 @@ function bestVoice(){
   }
   return voices[0];
 }
+/* iOS/iPadOS will not speak unless the very first utterance comes from inside a
+   real touch handler, and it drops an utterance queued right after cancel().
+   Both of those make an audio-first app look completely broken on an iPad. */
+let speechReady = false, spkTimer = null;
+function unlockSpeech(){
+  if (speechReady || !("speechSynthesis" in window)) return;
+  try{
+    const u = new SpeechSynthesisUtterance(" ");
+    u.volume = 0;
+    speechSynthesis.speak(u);
+    speechReady = true;
+  }catch(e){}
+}
+document.addEventListener("touchend", unlockSpeech, true);
+document.addEventListener("mousedown", unlockSpeech, true);
+
 function speak(text, rate){
   if (!("speechSynthesis" in window)) return;
   try{
-    speechSynthesis.cancel();
+    unlockSpeech();
+    if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     const v = bestVoice();
     if (v){ u.voice = v; u.lang = v.lang; } else { u.lang = "en-IN"; }
     u.rate = rate || Number(S.rate) || 0.8;
+    const note = document.getElementById("spkNote");
+    if (note){
+      clearTimeout(spkTimer);
+      u.onstart = function(){ clearTimeout(spkTimer); note.textContent = ""; };
+      spkTimer = setTimeout(function(){
+        note.textContent = "અવાજ ન સંભળાય? આઇપેડની બાજુની સ્વિચ પર સાઇલન્ટ બંધ કરો અને વોલ્યુમ વધારો.";
+      }, 1600);
+    }
     speechSynthesis.speak(u);
+    if (speechSynthesis.paused) speechSynthesis.resume();
   }catch(e){}
 }
 if ("speechSynthesis" in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
@@ -249,6 +275,7 @@ function stepLearn(i){
           <button class="speakbtn" id="say">🔊 સાંભળો</button>
           <button class="speakbtn slow" id="sayslow">🐢 ધીમે સાંભળો</button>
         </div>
+        <p class="muted" id="spkNote" style="font-size:.86rem;margin:4px 0 0;min-height:1.2em"></p>
         <p class="sayaloud">હવે તમે મોટેથી બોલો: <b>${esc(w.p)}</b></p>
         ${w.se ? `<div class="sentbox"><div class="lbl">વાક્યમાં વપરાશ</div>
           <p class="se">${esc(w.se)}</p><p class="sg">${esc(w.sg)}</p>
@@ -265,7 +292,7 @@ function stepLearn(i){
   $("#quit").onclick = () => go("home");
   $("#prev").onclick = () => stepLearn(i-1);
   $("#next").onclick = () => last ? nextStep() : stepLearn(i+1);
-  if (S.autoplay) setTimeout(() => speak(w.e), 250);
+  if (S.autoplay) speak(w.e);   // called straight from the tap, not a timer, for iOS
 }
 function stepDrill(i){
   const u = SES.unit, w = u.items[i], last = i === u.items.length-1;
@@ -333,7 +360,7 @@ function runQuiz(qs, title, subtitle, onDone){
         <div class="opts">${q.options.map((o,k) => `<button class="opt" data-k="${k}"><span class="${o.en?"en":""}">${esc(o.text)}</span></button>`).join("")}</div>
         <div id="fb"></div>
       </div>`;
-    if (q.listen){ $("#rep").onclick = () => speak(q.word.e); setTimeout(() => speak(q.word.e), 300); }
+    if (q.listen){ $("#rep").onclick = () => speak(q.word.e); speak(q.word.e); }
     const btns = Array.from(document.querySelectorAll(".opt"));
     btns.forEach(b => b.onclick = () => {
       const o = q.options[Number(b.dataset.k)];
